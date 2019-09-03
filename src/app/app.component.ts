@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Post } from './post.model';
+import { PostsService } from './posts.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -11,26 +12,19 @@ export class AppComponent implements OnInit {
   loadedPosts: Post[] = [];
   isFetching = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private postsService: PostsService) {}
 
   ngOnInit() {
-    this.fetchPosts();
+    this.postsService.fetchPosts();
   }
 
   onCreatePost(postData: { title: string; content: string }) {
-    this.http
-      .post<{ name: string }>(
-        'https://ng-complete-guide-48c3b.firebaseio.com/posts.json',
-        postData
-      )
-      .subscribe(responseData => {
-        console.log(responseData);
-      });
+    this.postsService.createAndStorePost(postData.title, postData.content);
   }
 
   onFetchPosts() {
     // Send Http request
-    this.fetchPosts();
+    this.postsService.fetchPosts();
   }
 
   onClearPosts() {
