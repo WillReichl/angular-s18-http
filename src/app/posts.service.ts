@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Post } from './post.model';
-import { map } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
+import { Subject, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -46,6 +46,13 @@ export class PostsService {
             }
           }
           return postsArray;
+        }),
+        catchError(errorRes => {
+          // Use this when you want to add an additional task on error -- send to analytics server, log, etc.
+          // You can also customize the error message seen by the observable subscriber here.
+          // But, then, pass along to subscribe...
+          return throwError(errorRes);
+          // or return throwError ({ message: 'Some custom message' });
         })
       );
   }
