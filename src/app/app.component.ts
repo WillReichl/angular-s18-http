@@ -55,4 +55,8 @@ export class AppComponent implements OnInit, OnDestroy {
       this.loadedPosts = [];
     });
   }
+
+  onHandleError() {
+    this.error = null;
+  }
 }
